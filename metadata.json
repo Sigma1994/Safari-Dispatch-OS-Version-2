@@ -1,0 +1,6 @@
+{
+  "name": "Safari Dispatch OS",
+  "description": "Kenyan safari quoting, fleet allocation, multi-turn intake, HITL approval, and SQLite dispatch console.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
