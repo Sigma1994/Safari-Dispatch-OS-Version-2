@@ -24,9 +24,36 @@ import type { NluMode } from "./server/types.ts";
 const PORT = 3000;
 const ROOT = process.cwd();
 
+async function checkOllamaOnStartup() {
+  if (useDeterministicLlm()) return;
+  const baseUrl = (process.env.OLLAMA_BASE_URL ?? "http://localhost:11434").replace(/\/$/, "");
+  const model = process.env.OLLAMA_MODEL ?? "qwen3:4b";
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 800);
+    const res = await fetch(`${baseUrl}/api/tags`, { signal: controller.signal });
+    clearTimeout(timer);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = (await res.json()) as { models?: Array<{ name?: string }> };
+    const installed = (data.models ?? []).some((m) => m.name === model || (m.name ?? "").startsWith(`${model}:`));
+    if (installed) {
+      console.log(`[LLM] Local Ollama ready at ${baseUrl} (model: ${model})`);
+    } else {
+      console.warn(`[LLM] Ollama running at ${baseUrl}, but '${model}' is missing. Run: ollama pull ${model}`);
+    }
+  } catch {
+    console.warn(
+      `[LLM] Ollama not detected at ${baseUrl}. For full local AI NLU/NLG run:\n` +
+        `      ollama pull ${model} && ollama serve\n` +
+        `      (Using deterministic fallback automatically until Ollama is running.)`
+    );
+  }
+}
+
 async function createApp() {
   const activeStorage = await initDb(DEFAULT_DB_PATH, DEFAULT_CHECKPOINT_DB_PATH);
   console.log(`[DB] Active storage engine: ${activeStorage}`);
+  await checkOllamaOnStartup();
 
   const app = express();
   app.use(express.json({ limit: "1mb" }));

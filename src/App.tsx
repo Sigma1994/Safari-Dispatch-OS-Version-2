@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { BookOpen, Compass, Cpu, FlaskConical, Inbox, Menu, RotateCcw, Truck, X } from "lucide-react";
+import { BookOpen, Compass, Cpu, FlaskConical, GraduationCap, Inbox, Menu, RotateCcw, Truck, X } from "lucide-react";
+import { ArchitectureGuide } from "./components/ArchitectureGuide";
 import { BookingsLedger } from "./components/BookingsLedger";
 import { CircuitsCatalog } from "./components/CircuitsCatalog";
 import { DispatchDesk } from "./components/DispatchDesk";
@@ -21,6 +22,7 @@ const NAV_ITEMS: Array<{ id: NavSection; label: string; icon: typeof Inbox }> = 
   { id: "circuits", label: "Parks & Rates", icon: Compass },
   { id: "engine", label: "System & Checks", icon: FlaskConical },
   { id: "training", label: "Model Training", icon: Cpu },
+  { id: "guide", label: "AI & System Guide", icon: GraduationCap },
 ];
 
 export default function App() {
@@ -66,9 +68,9 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex">
       {/* Desktop Sidebar (240px) */}
-      <aside className="hidden lg:flex lg:w-60 lg:flex-col lg:fixed lg:inset-y-0 bg-white border-r border-slate-200">
-        <div className="h-14 px-5 flex items-center border-b border-slate-200">
-          <span className="text-base font-bold tracking-tight text-slate-900 whitespace-nowrap">
+      <aside className="hidden lg:flex lg:w-60 lg:flex-col lg:fixed lg:inset-y-0 bg-gradient-to-b from-sky-100 via-sky-100/90 to-sky-200/80 border-r border-sky-200">
+        <div className="h-14 px-5 flex items-center border-b border-sky-200/80">
+          <span className="text-base font-bold tracking-tight text-sky-950 whitespace-nowrap">
             Safari Dispatch OS
           </span>
         </div>
@@ -83,16 +85,20 @@ export default function App() {
                 onClick={() => setSection(item.id)}
                 className={`w-full flex items-center justify-between gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${
                   active
-                    ? "bg-emerald-50 text-emerald-800"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                    ? "bg-sky-700 text-white shadow-xs"
+                    : "text-sky-900 hover:bg-sky-200/70 hover:text-sky-950"
                 }`}
               >
                 <span className="flex items-center gap-2.5">
-                  <Icon className="w-4 h-4 shrink-0" />
+                  <Icon className={`w-4 h-4 shrink-0 ${active ? "text-white" : "text-sky-700"}`} />
                   <span>{item.label}</span>
                 </span>
                 {item.id === "dispatch" && approvals.length > 0 && (
-                  <span className="font-mono text-xs tabular-nums text-amber-700 font-semibold">
+                  <span
+                    className={`font-mono text-xs tabular-nums font-semibold ${
+                      active ? "text-amber-200" : "text-amber-700"
+                    }`}
+                  >
                     {approvals.length}
                   </span>
                 )}
@@ -106,13 +112,13 @@ export default function App() {
       {mobileNavOpen && (
         <div className="fixed inset-0 z-40 lg:hidden flex">
           <div className="fixed inset-0 bg-slate-900/40" onClick={() => setMobileNavOpen(false)} />
-          <aside className="relative w-64 max-w-full bg-white h-full border-r border-slate-200 flex flex-col z-50">
-            <div className="h-14 px-4 flex items-center justify-between border-b border-slate-200">
-              <span className="text-base font-bold text-slate-900">Safari Dispatch OS</span>
+          <aside className="relative w-64 max-w-full bg-gradient-to-b from-sky-100 via-sky-100/90 to-sky-200/80 h-full border-r border-sky-200 flex flex-col z-50">
+            <div className="h-14 px-4 flex items-center justify-between border-b border-sky-200/80">
+              <span className="text-base font-bold text-sky-950">Safari Dispatch OS</span>
               <button
                 type="button"
                 onClick={() => setMobileNavOpen(false)}
-                className="p-1.5 text-slate-500 hover:text-slate-900"
+                className="p-1.5 text-sky-800 hover:text-sky-950"
                 aria-label="Close navigation"
               >
                 <X className="w-5 h-5" />
@@ -130,14 +136,25 @@ export default function App() {
                       setSection(item.id);
                       setMobileNavOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between gap-2.5 px-3 py-2.5 rounded-md text-sm font-medium ${
-                      active ? "bg-emerald-50 text-emerald-800" : "text-slate-700 hover:bg-slate-100"
+                    className={`w-full flex items-center justify-between gap-2.5 px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                      active
+                        ? "bg-sky-700 text-white shadow-xs"
+                        : "text-sky-900 hover:bg-sky-200/70 hover:text-sky-950"
                     }`}
                   >
                     <span className="flex items-center gap-2.5">
-                      <Icon className="w-4 h-4 shrink-0" />
+                      <Icon className={`w-4 h-4 shrink-0 ${active ? "text-white" : "text-sky-700"}`} />
                       <span>{item.label}</span>
                     </span>
+                    {item.id === "dispatch" && approvals.length > 0 && (
+                      <span
+                        className={`font-mono text-xs tabular-nums font-semibold ${
+                          active ? "text-amber-200" : "text-amber-700"
+                        }`}
+                      >
+                        {approvals.length}
+                      </span>
+                    )}
                   </button>
                 );
               })}
@@ -187,6 +204,7 @@ export default function App() {
           {section === "circuits" && <CircuitsCatalog circuits={circuits} />}
           {section === "engine" && <EngineAndTests health={health} onRefreshHealth={refreshData} />}
           {section === "training" && <LoraTrainingPlaybook />}
+          {section === "guide" && <ArchitectureGuide />}
         </main>
       </div>
     </div>

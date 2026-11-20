@@ -1,5 +1,5 @@
 export type NluMode = "deterministic" | "ollama" | "gemini";
-export type NavSection = "dispatch" | "bookings" | "fleet" | "circuits" | "engine" | "training";
+export type NavSection = "dispatch" | "bookings" | "fleet" | "circuits" | "engine" | "training" | "guide";
 
 export interface InquirySlots {
   intent: string;

@@ -13,6 +13,8 @@
     "db:setup": "tsx scripts/db-init.ts",
     "db:reset": "tsx scripts/db-init.ts --reset",
     "check:local": "tsx scripts/check-local.ts",
+    "ollama:setup": "tsx scripts/ensure-ollama.ts",
+    "dev:ollama": "tsx scripts/ensure-ollama.ts && tsx server.ts",
     "test": "tsx --test tests/safari_dispatch.test.ts",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"

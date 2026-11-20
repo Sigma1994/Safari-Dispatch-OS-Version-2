@@ -55,7 +55,7 @@ def serve_console():
 
 @app.get("/api/health")
 def health_check() -> dict[str, Any]:
-    deterministic = os.getenv("USE_DETERMINISTIC_LLM", "1").strip().lower() in {"1", "true", "yes"}
+    deterministic = os.getenv("USE_DETERMINISTIC_LLM", "0").strip().lower() in {"1", "true", "yes"}
     base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
     model = os.getenv("OLLAMA_MODEL", "qwen3:4b")
     ollama_status: dict[str, Any] = {"reachable": False, "model_installed": False, "model": model}

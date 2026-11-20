@@ -106,21 +106,23 @@ export function EngineAndTests({ health, onRefreshHealth }: EngineAndTestsProps)
         </section>
 
         <section className="bg-white border border-slate-200 rounded-lg p-5 space-y-3">
-          <h2 className="text-base font-semibold text-slate-900">Local Docker PostgreSQL &amp; Ollama Setup</h2>
+          <h2 className="text-base font-semibold text-slate-900">Required Local AI (Ollama) &amp; Database Setup</h2>
           <p className="text-xs text-slate-600 leading-relaxed">
-            Run PostgreSQL 16 in Docker Desktop (with automatic schema + seed scripts) and Ollama locally. When Postgres or Ollama is offline, the app falls back to SQLite and deterministic rules automatically.
+            Local Ollama (<code className="font-mono text-slate-800">qwen3:4b</code>) is the required primary AI engine on local machines, alongside optional PostgreSQL 16 in Docker Desktop. If either service is offline, the app falls back to SQLite and deterministic rules automatically.
           </p>
           <pre className="p-3 rounded-md bg-slate-900 text-slate-100 text-xs overflow-x-auto leading-relaxed">
-{`# 1. Start PostgreSQL 16 via Docker Desktop (auto-creates & seeds DB)
+{`# 1. Required Local AI Runtime (Ollama)
+ollama pull qwen3:4b
+ollama serve
+
+# Or verify/start Ollama + pull qwen3:4b automatically:
+npm run ollama:setup
+
+# 2. Optional PostgreSQL 16 via Docker Desktop (auto-creates & seeds DB)
 docker compose up -d postgres
 
-# 2. Or manually create / populate / reset tables via CLI scripts
-npm run db:create
-npm run db:seed
-npm run db:reset
-
-# 3. Pull Local Ollama model & run verification tests
-ollama pull qwen3:4b
+# 3. Verify full local stack & tests
+npm run check:local
 npm test`}
           </pre>
         </section>

@@ -28,7 +28,7 @@ def _max_drive_hours() -> float:
 
 
 def _use_deterministic() -> bool:
-    return os.getenv("USE_DETERMINISTIC_LLM", "1").strip().lower() in {"1", "true", "yes"}
+    return os.getenv("USE_DETERMINISTIC_LLM", "0").strip().lower() in {"1", "true", "yes"}
 
 
 def _llm() -> ChatOllama:

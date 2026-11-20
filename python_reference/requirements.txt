@@ -1,0 +1,22 @@
+# Safari Dispatch OS - Python Reference Requirements
+# ---------------------------------------------------------------------------
+# REQUIRED EXTERNAL AI RUNTIME (Ollama):
+#   ollama pull qwen3:4b
+#   ollama serve
+#
+# Both `run_server.py` and `src/api.py` connect to Local Ollama at
+# http://localhost:11434 (model: qwen3:4b) automatically by default.
+# ---------------------------------------------------------------------------
+
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+langgraph>=0.3.0
+langgraph-checkpoint-sqlite>=2.0.0
+langchain-ollama>=0.3.0
+langchain-core>=0.3.0
+pydantic>=2.0.0
+python-dotenv>=1.0.1
+
+# Dev / Test tools
+pytest>=8.0.0
+httpx>=0.27.0

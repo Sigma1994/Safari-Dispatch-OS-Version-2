@@ -14,6 +14,11 @@ import {
   STARTER_DATASET_PAIRS,
   TRAINING_STEPS,
 } from "../src/data/loraPlaybookData.ts";
+import {
+  computeArchitectureGuideWordCount,
+  GLOSSARY_ENTRIES,
+  GUIDE_CHAPTERS,
+} from "../src/data/aiArchitectureGuideData.ts";
 import type { BookingRecord } from "../src/types.ts";
 
 test("Safari Dispatch OS complete verification suite", async (t) => {
@@ -200,5 +205,12 @@ test("LoRA Training Playbook generates valid ChatML JSONL and covers all 6 steps
   ) as { messages: Array<{ role: string; content: string }> };
   assert.equal(customLine.messages[1].content, "Wasee 4 Amboseli 2026-12-10");
   assert.equal(TRAINING_STEPS.length, 6);
+});
+
+test("AI & System Guide covers 10 chapters, glossary, and exceeds 3,000 words", () => {
+  const words = computeArchitectureGuideWordCount();
+  assert.ok(words >= 3000, `Expected >= 3000 words, got ${words}`);
+  assert.equal(GUIDE_CHAPTERS.length, 10);
+  assert.ok(GLOSSARY_ENTRIES.length >= 10);
 });
 
